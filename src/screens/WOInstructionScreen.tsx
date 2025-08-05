@@ -17,6 +17,7 @@ import { useTheme } from '../context/ThemeContext';
 import { GenerateOneWayKanban } from '../utils/GenerateOneWayKanban';
 import { submitStockOutData } from '../utils/api';
 import ThemeToggle from '../components/ThemeToggle';
+import QRScanScreen from './QRScanScreen';
 import { StockOutItem, User } from '../types';
 
 interface WOInstructionScreenProps {
@@ -31,6 +32,7 @@ const WOInstructionScreen: React.FC<WOInstructionScreenProps> = ({ user, onLogou
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [wrongQR, setWrongQR] = useState(false);
+  const [showQRScanner, setShowQRScanner] = useState(false);
   const { isDarkMode } = useTheme();
 
   useEffect(() => {
@@ -75,7 +77,9 @@ const WOInstructionScreen: React.FC<WOInstructionScreenProps> = ({ user, onLogou
     return `ST${year}${month}${date}${hours}${minutes}${seconds}`;
   };
 
-  const handleScanIntent = async (qrData: string) => {
+  const handleScanResult = async (qrData: string) => {
+    setShowQRScanner(false);
+    
     if (qrData.length === 30) {
       const oneWayKanbanQR = new GenerateOneWayKanban(qrData);
       const currentData = JSON.parse(await AsyncStorage.getItem('stockOutData') || '[]');
@@ -154,11 +158,35 @@ const WOInstructionScreen: React.FC<WOInstructionScreenProps> = ({ user, onLogou
     }
   };
 
-  const simulateQRScan = () => {
-    // Simulate QR scan for testing
-    const testQR = '1234567890ABCDEFGHIJ1234567890';
-    handleScanIntent(testQR);
+  const deleteItem = async (index: number) => {
+    Alert.alert(
+      'Delete Item',
+      'Are you sure you want to delete this item?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Delete', 
+          style: 'destructive',
+          onPress: async () => {
+            const updatedData = data.filter((_, i) => i !== index);
+            setData(updatedData);
+            await AsyncStorage.setItem('stockOutData', JSON.stringify(updatedData));
+          }
+        }
+      ]
+    );
   };
+
+  if (showQRScanner) {
+    return (
+      <QRScanScreen
+        onScanResult={handleScanResult}
+        onClose={() => setShowQRScanner(false)}
+        scanType="kanban"
+        title="Scan Kanban QR"
+      />
+    );
+  }
 
   return (
     <SafeAreaView className={`flex-1 ${isDarkMode ? 'bg-dark-900' : 'bg-primary-50'}`}>
@@ -225,6 +253,9 @@ const WOInstructionScreen: React.FC<WOInstructionScreenProps> = ({ user, onLogou
           <Text className={`flex-1 text-center font-semibold ${
             isDarkMode ? 'text-dark-100' : 'text-primary-900'
           }`}>User</Text>
+          <Text className={`flex-1 text-center font-semibold ${
+            isDarkMode ? 'text-dark-100' : 'text-primary-900'
+          }`}>Action</Text>
         </View>
       </View>
 
@@ -236,7 +267,7 @@ const WOInstructionScreen: React.FC<WOInstructionScreenProps> = ({ user, onLogou
           {data.map((item, index) => (
             <View 
               key={index} 
-              className={`flex-row py-3 px-4 border-b ${
+              className={`flex-row py-3 px-4 border-b items-center ${
                 isDarkMode ? 'border-dark-700' : 'border-primary-100'
               }`}
             >
@@ -252,6 +283,12 @@ const WOInstructionScreen: React.FC<WOInstructionScreenProps> = ({ user, onLogou
               <Text className={`flex-1 text-center ${
                 isDarkMode ? 'text-dark-200' : 'text-primary-800'
               }`}>{item.NPK}</Text>
+              <TouchableOpacity
+                onPress={() => deleteItem(index)}
+                className="flex-1 items-center"
+              >
+                <Text className="text-accent-red text-lg">🗑️</Text>
+              </TouchableOpacity>
             </View>
           ))}
           
@@ -271,7 +308,7 @@ const WOInstructionScreen: React.FC<WOInstructionScreenProps> = ({ user, onLogou
       <View className="px-6 py-4 space-y-3">
         <View className="flex-row space-x-3">
           <TouchableOpacity
-            onPress={simulateQRScan}
+            onPress={() => setShowQRScanner(true)}
             className="flex-1 py-4 rounded-lg bg-primary-600"
           >
             <Text className="text-white text-center text-lg font-semibold">
