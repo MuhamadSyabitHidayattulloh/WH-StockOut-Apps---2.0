@@ -1,30 +1,48 @@
-import { OneWayKanban } from '../types';
+export class GenerateOneWayKanban {
+  private oneWayKanbanQR: string;
 
-export class GenerateOneWayKanban implements OneWayKanban {
-  private qrData: string;
+  constructor(oneWayKanbanQR: string) {
+    this.oneWayKanbanQR = oneWayKanbanQR;
+  }
 
-  constructor(qrData: string) {
-    this.qrData = qrData;
+  getDate(): string {
+    let fixCode = this.oneWayKanbanQR.substring(0, 7);
+    return fixCode;
+  }
+
+  getWhCode(): string {
+    let fixCode = this.oneWayKanbanQR.substring(22, 23);
+    return fixCode;
+  }
+
+  getUniqueCode(): string {
+    let uniqueCode = this.oneWayKanbanQR.substring(23);
+    return uniqueCode;
+  }
+
+  getTotalPartNumber(): string {
+    const partno = this.oneWayKanbanQR.substring(0, 15).trim();
+    return partno;
   }
 
   getPartNumber(): string {
-    // Extract part number from QR data (assuming specific format)
-    // This is a simplified implementation based on the original code
-    if (this.qrData.length >= 20) {
-      return this.qrData.substring(0, 10);
-    }
-    return 'UNKNOWN';
+    const partnoSuffix = this.oneWayKanbanQR.substring(0, 15).trim();
+    const partno = partnoSuffix.endsWith("A")
+      ? partnoSuffix.slice(0, -1)
+      : partnoSuffix;
+    return partno;
   }
 
   getQtyPerKanban(): number {
-    // Extract quantity from QR data (assuming specific format)
-    // This is a simplified implementation
-    if (this.qrData.length >= 30) {
-      const qtyStr = this.qrData.substring(20, 25);
-      const qty = parseInt(qtyStr, 10);
-      return isNaN(qty) ? 1 : qty;
+    let qtyPerKanban = this.oneWayKanbanQR.substring(16, 22);
+
+    let newQty = "";
+    for (let index = 0; index < qtyPerKanban.length; index++) {
+      if (qtyPerKanban.charAt(index) !== '0') {
+        newQty += qtyPerKanban.charAt(index);
+      }
     }
-    return 1;
+    return parseInt(newQty);
   }
 }
 

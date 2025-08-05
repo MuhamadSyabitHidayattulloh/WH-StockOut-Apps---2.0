@@ -75,7 +75,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onRegister }) => {
         await AsyncStorage.setItem('userDataLogin', JSON.stringify(userData));
         onLogin(userData);
       } else {
-        Alert.alert('QR Login Failed', response.message || 'Invalid QR code');
+        Alert.alert('QR Login Failed', response.message || 'Invalid QR code format. Expected format: USERNAME:PASSWORD');
       }
     } catch (error) {
       Alert.alert('Error', 'QR login failed. Please try again.');

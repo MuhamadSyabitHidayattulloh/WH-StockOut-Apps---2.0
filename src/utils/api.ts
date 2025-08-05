@@ -57,8 +57,19 @@ export const loginUser = async (username: string, password: string): Promise<Api
 
 export const loginUserQr = async (qrData: string): Promise<ApiResponse> => {
   try {
+    // Parse QR data - assuming format: "USERNAME:PASSWORD" or similar
+    // Based on backend validation, we need USERNAME and PASSWORD fields
+    const qrParts = qrData.split(':');
+    if (qrParts.length !== 2) {
+      return {
+        success: false,
+        message: 'Invalid QR code format',
+      };
+    }
+
     const response = await axios.post(loginQrApi, {
-      qrData: qrData,
+      USERNAME: qrParts[0],
+      PASSWORD: qrParts[1],
     });
     return {
       success: true,
