@@ -1,97 +1,176 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# WH StockOut Apps 2.0
 
-# Getting Started
+Modern warehouse management application built with React Native and TypeScript, focusing on the WOInstruction feature for efficient stockout operations.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+- **Modern UI/UX**: Clean and professional design with light/dark mode support
+- **TypeScript**: Full TypeScript implementation for better code quality and maintainability
+- **Tailwind CSS**: Styled with NativeWind (Tailwind CSS for React Native)
+- **WOInstruction Focus**: Streamlined interface focusing only on the core stockout functionality
+- **QR Code Scanning**: Kanban QR code scanning for inventory management
+- **Data Persistence**: Local storage with AsyncStorage
+- **API Integration**: Compatible with existing backend infrastructure
+- **Theme Support**: Light and dark mode with Manus.im inspired color palette
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Technology Stack
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- **React Native**: 0.80.2
+- **TypeScript**: Latest
+- **NativeWind**: Tailwind CSS for React Native
+- **AsyncStorage**: Local data persistence
+- **Axios**: HTTP client for API calls
+- **React Navigation**: Navigation management
+- **Moment.js**: Date/time handling
 
-```sh
-# Using npm
-npm start
+## Color Palette
 
-# OR using Yarn
-yarn start
+The app uses a modern color palette inspired by Manus.im:
+
+### Light Mode
+- Primary: Blue tones (#0ea5e9, #0284c7, #0369a1)
+- Background: Light grays (#f0f9ff, #e0f2fe)
+- Text: Dark blues (#0c4a6e, #075985)
+
+### Dark Mode
+- Primary: Dark grays (#1e293b, #334155, #475569)
+- Background: Very dark (#0f172a, #1e293b)
+- Text: Light grays (#f1f5f9, #e2e8f0)
+
+### Accent Colors
+- Green: #10b981 (Success)
+- Red: #ef4444 (Error/Reset)
+- Yellow: #f59e0b (Warning)
+- Purple: #8b5cf6 (Info)
+- Orange: #f97316 (Alert)
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/MuhamadSyabitHidayattulloh/WH-StockOut-Apps---2.0.git
+cd WH-StockOut-Apps---2.0
 ```
 
-## Step 2: Build and run your app
+2. Install dependencies:
+```bash
+npm install
+```
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+3. For iOS (macOS only):
+```bash
+cd ios && pod install && cd ..
+```
 
-### Android
+4. Run the application:
 
-```sh
-# Using npm
+For Android:
+```bash
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+For iOS:
+```bash
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## Project Structure
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```
+src/
+├── components/          # Reusable UI components
+│   └── ThemeToggle.tsx
+├── context/            # React Context providers
+│   └── ThemeContext.tsx
+├── screens/            # Screen components
+│   ├── LoginScreen.tsx
+│   └── WOInstructionScreen.tsx
+├── types/              # TypeScript type definitions
+│   └── index.ts
+└── utils/              # Utility functions and API
+    ├── api.ts
+    └── GenerateOneWayKanban.ts
+```
 
-## Step 3: Modify your app
+## Key Features
 
-Now that you have successfully run the app, let's make changes!
+### 1. Login System
+- Secure user authentication
+- Persistent login state
+- Modern login interface
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+### 2. WOInstruction Screen
+- QR code scanning for Kanban
+- Real-time data table
+- Duplicate detection
+- Data submission to backend
+- Reset functionality with password protection
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+### 3. Theme System
+- Light/Dark mode toggle
+- Persistent theme preference
+- Manus.im inspired color scheme
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+### 4. Data Management
+- Local storage with AsyncStorage
+- Real-time data updates
+- Backend synchronization
 
-## Congratulations! :tada:
+## API Integration
 
-You've successfully run and modified your React Native App. :partying_face:
+The app is compatible with the existing backend infrastructure:
 
-### Now what?
+- **Base URL**: `http://10.122.73.131:8700/wh-stockout`
+- **Login Endpoint**: `/api/loginApps/Stockout/confirmLogin`
+- **StockOut Endpoint**: `/api/warehouse/stockoutAndroid`
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+## Development
 
-# Troubleshooting
+### Prerequisites
+- Node.js (>= 18)
+- React Native CLI
+- Android Studio (for Android development)
+- Xcode (for iOS development, macOS only)
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+### Scripts
+- `npm start`: Start Metro bundler
+- `npm run android`: Run on Android
+- `npm run ios`: Run on iOS
+- `npm run lint`: Run ESLint
+- `npm test`: Run tests
 
-# Learn More
+### TypeScript
+The project is fully typed with TypeScript. Run type checking with:
+```bash
+npx tsc --noEmit
+```
 
-To learn more about React Native, take a look at the following resources:
+## Changes from Original App
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+1. **Removed Features**: Stockout, WInstruction, and Shopping List subpages
+2. **Focused UI**: Streamlined interface for WOInstruction only
+3. **Modern Design**: Updated with Tailwind CSS and modern UI patterns
+4. **TypeScript**: Complete migration from JavaScript to TypeScript
+5. **Theme Support**: Added light/dark mode functionality
+6. **Improved UX**: Better error handling and user feedback
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and type checking
+5. Submit a pull request
+
+## License
+
+This project is proprietary software for warehouse management operations.
+
+## Author
+
+**Muhamad Syabit Hidayattulloh**
+- GitHub: [@MuhamadSyabitHidayattulloh](https://github.com/MuhamadSyabitHidayattulloh)
+
+---
+
+Built with ❤️ using React Native and TypeScript
